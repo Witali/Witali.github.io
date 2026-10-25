@@ -8,7 +8,15 @@
     "Witali/QEMU-ESP32",
     "Witali/r36sx_disasm",
     "Witali/micronucleus",
-    "Witali/power-amp"
+    "Witali/power-amp",
+    "Witali/block-palette-compression",
+    "Witali/dim-screensaver",
+    "Witali/DosToEsp",
+    "Witali/funny-ai-pictures",
+    "Witali/HLV-codec",
+    "Witali/LPC-sound-codec",
+    "Witali/picolang",
+    "Witali/webgl-example"
   ],
   "bitbucketRepositories": [
     "rudolff/pic_projects",
