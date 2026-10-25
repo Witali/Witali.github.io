@@ -9,3 +9,9 @@ test('allows verified public sources and profile links', () => {
 test('blocks unverified GitHub sources without a network lookup', () => {
   assert.throws(() => assertPublicSources('https://github.com/example/unverified-project', ['Witali/MicroMusic']), /unverified GitHub source/);
 });
+
+test('requires a confirmed public Bitbucket source', () => {
+  const link = 'https://bitbucket.org/rudolff/z80-tester/';
+  assert.throws(() => assertPublicSources(link, []), /unverified Bitbucket source/);
+  assert.doesNotThrow(() => assertPublicSources(link, [], 'content', ['rudolff/z80-tester']));
+});

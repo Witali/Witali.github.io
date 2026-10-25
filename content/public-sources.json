@@ -9,5 +9,20 @@
     "Witali/r36sx_disasm",
     "Witali/micronucleus",
     "Witali/power-amp"
+  ],
+  "bitbucketRepositories": [
+    "rudolff/pic_projects",
+    "rudolff/mcs51extram",
+    "rudolff/programmer",
+    "rudolff/z80controller",
+    "rudolff/flickr-explorer",
+    "rudolff/javascripts",
+    "rudolff/workflow",
+    "rudolff/z80sbc",
+    "rudolff/ios-z80-mbc2",
+    "rudolff/fdcduino",
+    "rudolff/mt8816_keyboard",
+    "rudolff/z80-tester",
+    "rudolff/rk86_keyboard"
   ]
 }

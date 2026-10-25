@@ -35,7 +35,11 @@ function renderProject(project, index) {
 }
 
 function renderProjects() {
-  return `<section class="project-section" id="projects" aria-labelledby="projects-title"><div class="journal-heading"><div><p class="eyebrow">Идеи, которые обрели папку</p><h1 id="projects-title">Мои проекты<span class="heading-dot">.</span></h1></div><span class="project-total">${projects.length} проектов</span></div><p class="section-description">Над чем работаю: маленькие процессоры, музыка, эмуляторы и немного аналогового железа.</p><div class="project-grid">${projects.map(renderProject).join('\n')}</div></section>`;
+  const current = projects.filter((project) => project.group !== 'bitbucket');
+  const bitbucket = projects.filter((project) => project.group === 'bitbucket');
+  const count = projects.length;
+  const noun = count % 10 === 1 && count % 100 !== 11 ? 'проект' : [2, 3, 4].includes(count % 10) && ![12, 13, 14].includes(count % 100) ? 'проекта' : 'проектов';
+  return `<section class="project-section" id="projects" aria-labelledby="projects-title"><div class="journal-heading"><div><p class="eyebrow">Публичные репозитории и разработки</p><h1 id="projects-title">Мои проекты<span class="heading-dot">.</span></h1></div><span class="project-total">${count} ${noun}</span></div><p class="section-description">Мои публичные проекты: маленькие процессоры, музыка, эмуляторы, аналоговое железо и веб-приложения.</p><div class="project-grid">${current.map(renderProject).join('\n')}</div>${bitbucket.length ? `<h2 class="project-group-title" id="bitbucket-projects">Ещё проекты на Bitbucket</h2><div class="project-grid">${bitbucket.map((project, index) => renderProject(project, current.length + index)).join('\n')}</div>` : ''}</section>`;
 }
 
 function renderPage(archive = false, projectsOnly = false) {

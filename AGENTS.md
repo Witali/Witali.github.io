@@ -8,12 +8,12 @@
 
 # Private projects
 
-- Do not include private GitHub projects in the blog unless the user explicitly authorizes disclosing that specific project.
+- Do not include private GitHub or Bitbucket projects in the blog unless the user explicitly authorizes disclosing that specific project.
 - This applies to project names, descriptions, repository links, screenshots, daily post content, and technical results derived from private projects.
 - Verify repository visibility before including a project or using it as a source. If its public status cannot be confirmed, omit it until the user explicitly allows disclosure.
 - General approval to publish a post does not authorize disclosure of a private project. Ask for specific authorization if private-project material is needed.
 - Before publishing, check both the generated site and the files and Git history being uploaded for private-project information.
-- Run `npm run check:public` before publication. The build also checks GitHub links against `content/public-sources.json` locally, without making network requests. Add an entry only after independently verifying public visibility; reconfirm visibility before publication.
+- Run `npm run check:public` before publication. The build also checks GitHub and Bitbucket links against `content/public-sources.json` locally, without making network requests. Add an entry only after independently verifying public visibility; reconfirm visibility before publication. Verify Bitbucket projects without authentication and require `is_private: false`.
 
 # Post content
 

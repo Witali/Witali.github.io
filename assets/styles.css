@@ -11,6 +11,7 @@
 @media(max-width:760px){nav{gap:17px}.github-link{padding-left:17px}.project-section{margin-top:50px}.project-grid{gap:0 22px}.project-card h3{font-size:19px}.project-card .prose{font-size:12px}.project-card-top{font-size:8px}.section-description{font-size:13px}.project-total{font-size:10px}.project-card .video-link{font-size:10px}.project-card{padding-block:22px}.feed{padding-top:22px}}
 @media(max-width:520px){nav a[href="#about"]{display:none}.project-grid{grid-template-columns:1fr}.project-card{padding:22px 0 25px}.project-card .prose{font-size:13px}.project-card h3{font-size:22px}.project-card-top{font-size:9px}.project-links{font-size:11px}.project-card .video-link{font-size:11px}}
 .projects-page .project-section{margin-top:0;padding-top:56px}.projects-page h1{font-size:36px;font-weight:650;letter-spacing:-1.4px;margin:12px 0 0;max-width:none}
+.project-group-title{font-size:24px;letter-spacing:-.5px;font-weight:600;margin:38px 0 20px;scroll-margin-top:25px}
 @media(max-width:760px){.projects-page .project-section{padding-top:35px}.projects-page h1{font-size:29px;letter-spacing:-1px}}
 @media(max-width:520px){nav a[href$="#about"]{display:none}}
 body{overflow-anchor:none}
