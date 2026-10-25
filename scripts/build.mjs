@@ -34,24 +34,30 @@ function renderProject(project, index) {
   return `<article class="project-card" id="project-${e(project.id)}"><div class="project-card-top"><span class="project-number">${String(index + 1).padStart(2, '0')}</span><span>${e(project.category)}</span></div><h3>${e(project.title)}</h3><div class="prose">${project.html}</div><div class="project-links">${project.links.map((link) => `<a href="${e(link.url)}">${e(link.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>${videoLinks(project.videos)}</article>`;
 }
 
-function renderPage(archive = false) {
-const pageUrl = archive ? `${siteUrl}archive.html` : siteUrl;
+function renderProjects() {
+  return `<section class="project-section" id="projects" aria-labelledby="projects-title"><div class="journal-heading"><div><p class="eyebrow">Идеи, которые обрели папку</p><h1 id="projects-title">Мои проекты<span class="heading-dot">.</span></h1></div><span class="project-total">${projects.length} проектов</span></div><p class="section-description">Над чем работаю: маленькие процессоры, музыка, эмуляторы и немного аналогового железа.</p><div class="project-grid">${projects.map(renderProject).join('\n')}</div></section>`;
+}
+
+function renderPage(archive = false, projectsOnly = false) {
+const pageUrl = projectsOnly ? `${siteUrl}projects.html` : archive ? `${siteUrl}archive.html` : siteUrl;
+const title = projectsOnly ? `${config.title} — проекты` : `${config.title} — дневник разработки`;
 return `<!doctype html>
 <html lang="ru"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>${e(config.title)} — дневник разработки</title>
+<title>${e(title)}</title>
 <meta name="description" content="${e(config.description)}"><meta name="theme-color" content="#f8f7f3">
 <link rel="canonical" href="${e(pageUrl)}"><link rel="icon" href="${asset('favicon.svg')}" type="image/svg+xml">
 <link rel="alternate" type="application/atom+xml" title="${e(config.title)}" href="${basePath}/feed.xml">
-<meta property="og:title" content="${e(config.title)} — дневник разработки"><meta property="og:description" content="${e(config.description)}">
-<meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:url" content="${e(siteUrl)}">
+<meta property="og:title" content="${e(title)}"><meta property="og:description" content="${e(config.description)}">
+<meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:url" content="${e(pageUrl)}">
 <meta property="og:image" content="${e(new URL(asset('workbench.png'), siteUrl).href)}">
-<link rel="stylesheet" href="${asset('styles.css')}"><script src="${asset('journal.js')}" defer></script>
+<link rel="stylesheet" href="${asset('styles.css')}">${projectsOnly ? '' : `<script src="${asset('journal.js')}" defer></script>`}
 </head><body id="top">
-<a class="skip-link" href="#journal">К записям</a>
-<header class="site-header wrap"><a class="brand" href="#top"><span class="brand-icon">${codeIcon}</span>${e(config.title)}<span class="brand-dot">.</span></a>
-<nav aria-label="Основная навигация"><a class="current" href="#journal">Дневник</a><a href="#projects">Проекты</a><a href="#about">Об авторе</a><a class="github-link" href="${e(config.github)}">GitHub <span aria-hidden="true">↗</span></a></nav></header>
-<main class="wrap">
+<a class="skip-link" href="${projectsOnly ? '#projects' : '#journal'}">${projectsOnly ? 'К проектам' : 'К записям'}</a>
+<header class="site-header wrap"><a class="brand" href="${projectsOnly ? `${basePath}/` : '#top'}"><span class="brand-icon">${codeIcon}</span>${e(config.title)}<span class="brand-dot">.</span></a>
+<nav aria-label="Основная навигация"><a${projectsOnly ? '' : ' class="current"'} href="${projectsOnly ? `${basePath}/#journal` : '#journal'}">Дневник</a><a${projectsOnly ? ' class="current" aria-current="page"' : ''} href="${basePath}/projects.html">Проекты</a><a href="${projectsOnly ? `${basePath}/#about` : '#about'}">Об авторе</a><a class="github-link" href="${e(config.github)}">GitHub <span aria-hidden="true">↗</span></a></nav></header>
+<main class="wrap${projectsOnly ? ' projects-page' : ''}">
+${projectsOnly ? renderProjects() : `
 <section class="intro" id="about" aria-labelledby="intro-title">
 <div class="intro-copy"><p class="eyebrow"><span class="status-dot"></span>${e(intro.data.eyebrow)}</p><h1 id="intro-title">${e(intro.data.title)}</h1><div class="intro-text prose">${markdown.render(intro.content)}</div><a class="text-link" href="#journal">Что нового на верстаке <span aria-hidden="true">↓</span></a></div>
 <figure class="hero"><img src="${asset('workbench.png')}" width="1942" height="809" alt="Иллюстрация мастерской: программист с кружкой за столом, кот, микросхемы и ретрокомпьютеры" fetchpriority="high"><figcaption><span>Код. Паяльник. Ещё одна идея.</span><span>Личная территория экспериментов</span></figcaption></figure>
@@ -64,9 +70,9 @@ ${!archive && posts.length > 3 ? `<div class="load-more"><button id="load-more" 
 <p class="feed-end" ${!archive && posts.length > 3 ? 'hidden' : ''}><span></span>Пока всё. Продолжение — на верстаке.<span></span></p></div>
 <aside class="sidebar" aria-label="О дневнике"><div class="sidebar-note"><span class="small-code">${codeIcon}</span><h3>Впихнуть невпихуемое</h3><p>Музыка на крошечном AVR, звук на Z80 и другие задачи, которые слишком интересны, чтобы их отложить.</p><span class="handwritten">Проверяю на практике.</span></div>
 <div class="projects"><p class="eyebrow">На верстаке</p><a href="https://github.com/Witali/MicroMusic"><span>MicroMusic<small>Музыка на маленьких процессорах</small></span>↗</a><a href="https://github.com/Witali/Web-MIDI-Player"><span>Web MIDI Player<small>Синтезатор прямо в браузере</small></span>↗</a><a href="https://github.com/Witali/yoRadio"><span>yoRadio<small>Радио, экраны и ESP32</small></span>↗</a></div>
-<a class="all-projects" href="#projects">Все проекты <span aria-hidden="true">↓</span></a>
+<a class="all-projects" href="${basePath}/projects.html">Все проекты <span aria-hidden="true">↗</span></a>
 <p class="sidebar-caption">Коротко о сделанном.<br>Свежие записи — сверху.</p></aside></div></section>
-<section class="project-section" id="projects" aria-labelledby="projects-title"><div class="journal-heading"><div><p class="eyebrow">Идеи, которые обрели папку</p><h2 id="projects-title">Мои проекты<span class="heading-dot">.</span></h2></div><span class="project-total">${projects.length} проектов</span></div><p class="section-description">Над чем работаю: маленькие процессоры, музыка, эмуляторы и немного аналогового железа.</p><div class="project-grid">${projects.map(renderProject).join('\n')}</div></section>
+`}
 </main><footer class="site-footer wrap"><p>© ${posts[0]?.date.slice(0, 4) ?? new Date().getUTCFullYear()} ${e(config.author)} <span>·</span> ${e(config.title)}</p><a href="#top">Наверх ↑</a></footer>
 </body></html>`;
 }
@@ -79,6 +85,7 @@ await mkdir(output, { recursive: true });
 await cp(path.join(root, 'assets'), path.join(output, 'assets'), { recursive: true });
 await writeFile(path.join(output, 'index.html'), renderPage());
 await writeFile(path.join(output, 'archive.html'), renderPage(true));
+await writeFile(path.join(output, 'projects.html'), renderPage(false, true));
 await mkdir(path.join(output, 'entries'), { recursive: true });
 for (let start = 3; start < posts.length; start += 3) {
   const page = start / 3 + 1;
