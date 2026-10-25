@@ -2,6 +2,9 @@
 title: У MIDI-плеера появилось своё имя
 date: '2026-10-19'
 tags: [Web MIDI, Z80]
+videos:
+  - label: Конвертер MIDI в прошивку Z80
+    url: https://youtu.be/WqgDrsW2B88
 sources:
   - label: Web MIDI Player
     url: https://github.com/Witali/Web-MIDI-Player/commit/08a7877

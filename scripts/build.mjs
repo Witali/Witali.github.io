@@ -2,12 +2,13 @@ import { cp, mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
-import { escapeHtml as e, loadPosts, markdown } from './content.mjs';
+import { escapeHtml as e, loadPosts, loadProjects, markdown } from './content.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 const config = JSON.parse(await readFile(path.join(root, 'site.config.json'), 'utf8'));
 const posts = await loadPosts(path.join(root, 'content/posts'), { timeZone: config.timeZone });
 const intro = matter(await readFile(path.join(root, 'content/intro.md'), 'utf8'));
+const projects = await loadProjects(path.join(root, 'content/projects'));
 const basePath = (process.env.SITE_BASE_PATH ?? config.basePath).replace(/\/$/, '');
 if (basePath && !/^\/[a-zA-Z0-9_/-]+$/.test(basePath)) throw new Error('SITE_BASE_PATH must be empty or an absolute URL path');
 const asset = (file) => `${basePath}/assets/${file}`;
@@ -15,6 +16,7 @@ const siteUrl = `${(process.env.SITE_ORIGIN || config.url).replace(/\/$/, '')}${
 const dateLabel = (date, options) => new Intl.DateTimeFormat('ru', { timeZone: 'UTC', ...options }).format(new Date(`${date}T12:00:00Z`));
 const monthLabel = (date) => dateLabel(date, { month: 'long', year: 'numeric' }).replace(' г.', '');
 const codeIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+const videoLinks = (videos) => videos.length ? `<div class="video-links">${videos.map((video) => `<a class="video-link" href="${e(video.url)}"><span class="play-icon" aria-hidden="true">▶</span><span>${e(video.label)}</span><span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
 
 function renderPost(post, index) {
   const tags = post.tags.map((tag) => `<span class="tag">${e(tag)}</span>`).join('');
@@ -22,8 +24,12 @@ function renderPost(post, index) {
   return `<article class="entry" id="${post.id}" data-tags="${e(post.tags.join('|'))}">
     <div class="entry-date"><time datetime="${post.date}"><span class="day">${dateLabel(post.date, { day: '2-digit' })}</span><span>${dateLabel(post.date, { month: 'short' }).replace('.', '')}</span></time><span class="weekday">${dateLabel(post.date, { weekday: 'short' })}</span></div>
     <div class="entry-content"><div class="entry-meta">${tags}${index === 0 ? '<span class="latest">Свежая запись</span>' : ''}</div>
-    <h3><a href="#${post.id}">${e(post.title)}</a></h3><div class="prose">${post.html}</div>${sources}</div>
+    <h3><a href="${basePath}/archive.html#${post.id}">${e(post.title)}</a></h3><div class="prose">${post.html}</div>${videoLinks(post.videos)}${sources}</div>
   </article>`;
+}
+
+function renderProject(project, index) {
+  return `<article class="project-card" id="project-${e(project.id)}"><div class="project-card-top"><span class="project-number">${String(index + 1).padStart(2, '0')}</span><span>${e(project.category)}</span></div><h3>${e(project.title)}</h3><div class="prose">${project.html}</div><div class="project-links">${project.links.map((link) => `<a href="${e(link.url)}">${e(link.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>${videoLinks(project.videos)}</article>`;
 }
 
 function renderPage(archive = false) {
@@ -42,7 +48,7 @@ return `<!doctype html>
 </head><body id="top">
 <a class="skip-link" href="#journal">К записям</a>
 <header class="site-header wrap"><a class="brand" href="#top"><span class="brand-icon">${codeIcon}</span>${e(config.title)}<span class="brand-dot">.</span></a>
-<nav aria-label="Основная навигация"><a class="current" href="#journal">Дневник</a><a href="#about">Об авторе</a><a class="github-link" href="${e(config.github)}">GitHub <span aria-hidden="true">↗</span></a></nav></header>
+<nav aria-label="Основная навигация"><a class="current" href="#journal">Дневник</a><a href="#projects">Проекты</a><a href="#about">Об авторе</a><a class="github-link" href="${e(config.github)}">GitHub <span aria-hidden="true">↗</span></a></nav></header>
 <main class="wrap">
 <section class="intro" id="about" aria-labelledby="intro-title">
 <div class="intro-copy"><p class="eyebrow"><span class="status-dot"></span>${e(intro.data.eyebrow)}</p><h1 id="intro-title">${e(intro.data.title)}</h1><div class="intro-text prose">${markdown.render(intro.content)}</div><a class="text-link" href="#journal">Что нового на верстаке <span aria-hidden="true">↓</span></a></div>
@@ -56,7 +62,9 @@ ${!archive && posts.length > 3 ? `<div class="load-more"><button id="load-more" 
 <p class="feed-end" ${!archive && posts.length > 3 ? 'hidden' : ''}><span></span>Пока всё. Продолжение — на верстаке.<span></span></p></div>
 <aside class="sidebar" aria-label="О дневнике"><div class="sidebar-note"><span class="small-code">${codeIcon}</span><h3>Впихнуть невпихуемое</h3><p>Музыка на крошечном AVR, звук на Z80 и другие задачи, которые слишком интересны, чтобы их отложить.</p><span class="handwritten">Проверяю на практике.</span></div>
 <div class="projects"><p class="eyebrow">На верстаке</p><a href="https://github.com/Witali/MicroMusic"><span>MicroMusic<small>Музыка на маленьких процессорах</small></span>↗</a><a href="https://github.com/Witali/Web-MIDI-Player"><span>Web MIDI Player<small>Синтезатор прямо в браузере</small></span>↗</a><a href="https://github.com/Witali/yoRadio"><span>yoRadio<small>Радио, экраны и ESP32</small></span>↗</a></div>
+<a class="all-projects" href="#projects">Все проекты <span aria-hidden="true">↓</span></a>
 <p class="sidebar-caption">Коротко о сделанном.<br>Свежие записи — сверху.</p></aside></div></section>
+<section class="project-section" id="projects" aria-labelledby="projects-title"><div class="journal-heading"><div><p class="eyebrow">Идеи, которые обрели папку</p><h2 id="projects-title">Мои проекты<span class="heading-dot">.</span></h2></div><span class="project-total">${projects.length} проектов</span></div><p class="section-description">Над чем работаю: маленькие процессоры, музыка, эмуляторы и немного аналогового железа.</p><div class="project-grid">${projects.map(renderProject).join('\n')}</div></section>
 </main><footer class="site-footer wrap"><p>© ${posts[0]?.date.slice(0, 4) ?? new Date().getUTCFullYear()} ${e(config.author)} <span>·</span> ${e(config.title)}</p><a href="#top">Наверх ↑</a></footer>
 </body></html>`;
 }

@@ -2,6 +2,9 @@
 title: Кодеки и музыка на ATtiny88
 date: '2026-10-25'
 tags: [MicroMusic, yoRadio]
+videos:
+  - label: Музыка на крошечном AVR
+    url: https://youtu.be/WqFaOTUdEe0
 sources:
   - label: Прошивки UM88
     url: https://github.com/Witali/MicroMusic/commit/334f2a17

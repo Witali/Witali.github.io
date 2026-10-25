@@ -34,3 +34,9 @@ test('renders Markdown while keeping HTML and unsafe links inert', () => {
   assert.match(post.html, /<strong>Готово<\/strong>/);
   assert.doesNotMatch(post.html, /<script>|href="javascript:/);
 });
+
+test('video metadata accepts YouTube links and rejects other hosts', () => {
+  const video = (url) => source('2026-10-25').replace('tags: [AVR]', `tags: [AVR]\nvideos:\n  - label: Видео\n    url: ${url}`);
+  assert.equal(parsePost(video('https://youtu.be/WqFaOTUdEe0'), '2026-10-25-entry.md').videos.length, 1);
+  assert.throws(() => parsePost(video('https://example.com/'), '2026-10-25-entry.md'), /YouTube/);
+});

@@ -2,6 +2,9 @@
 title: AVR переезжает в WebAssembly
 date: '2026-10-21'
 tags: [MicroMusic, Web MIDI]
+videos:
+  - label: Видео о MicroMusic
+    url: https://youtu.be/WqFaOTUdEe0
 sources:
   - label: AVR на C и WASM
     url: https://github.com/Witali/MicroMusic/commit/27949ac3

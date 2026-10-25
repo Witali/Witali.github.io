@@ -16,6 +16,18 @@ export function localDay(now = new Date(), timeZone = 'Europe/Budapest') {
   return ['year', 'month', 'day'].map((name) => parts.find((part) => part.type === name).value).join('-');
 }
 
+function links(value, filename, { youtube = false } = {}) {
+  if (value == null) return [];
+  if (!Array.isArray(value) || value.some((link) => {
+    try {
+      const url = new URL(link.url);
+      return typeof link.label !== 'string' || !link.label.trim() || url.protocol !== 'https:' ||
+        (youtube && !['youtube.com', 'www.youtube.com', 'youtu.be'].includes(url.hostname));
+    } catch { return true; }
+  })) throw new Error(`${filename}: links need a label and a valid ${youtube ? 'YouTube' : 'HTTPS'} URL`);
+  return value;
+}
+
 function plainText(source) {
   const tokens = markdown.parse(source, {});
   return tokens.filter((token) => token.type === 'inline').map((token) =>
@@ -37,18 +49,26 @@ export function parsePost(source, filename) {
   if (!Array.isArray(data.tags) || !data.tags.length || data.tags.some((tag) => typeof tag !== 'string')) {
     throw new Error(`${filename}: tags must be a nonempty string array`);
   }
-  if (data.sources != null && (!Array.isArray(data.sources) || data.sources.some((source) =>
-    typeof source?.label !== 'string' || !/^https:\/\//.test(source?.url ?? '')))) {
-    throw new Error(`${filename}: sources must contain labels and HTTPS URLs`);
-  }
   const text = plainText(content);
   const sentences = [...new Intl.Segmenter('ru', { granularity: 'sentence' }).segment(text)]
     .filter((item) => item.segment.trim()).length;
   if (!text.trim() || sentences > 10) throw new Error(`${filename}: use 1–10 sentences (found ${sentences})`);
   return {
-    title: data.title.trim(), date, tags: [...new Set(data.tags)], sources: data.sources ?? [],
+    title: data.title.trim(), date, tags: [...new Set(data.tags)], sources: links(data.sources, filename),
+    videos: links(data.videos, filename, { youtube: true }),
     id: `post-${match[1]}-${match[2]}`, filename, text, sentences, html: markdown.render(content),
   };
+}
+
+export async function loadProjects(directory) {
+  const files = (await readdir(directory)).filter((file) => file.endsWith('.md'));
+  const projects = await Promise.all(files.map(async (file) => {
+    const { data, content } = matter(await readFile(path.join(directory, file), 'utf8'));
+    if (!data.title || !data.category || !Number.isInteger(data.order) || !content.trim()) throw new Error(`${file}: project title, category, order and description are required`);
+    return { ...data, id: file.replace(/\.md$/, ''), html: markdown.render(content),
+      links: links(data.links, file), videos: links(data.videos, file, { youtube: true }) };
+  }));
+  return projects.sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
 }
 
 export async function loadPosts(directory, { now = new Date(), timeZone } = {}) {

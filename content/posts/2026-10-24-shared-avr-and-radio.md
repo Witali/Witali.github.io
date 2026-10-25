@@ -2,6 +2,9 @@
 title: Общее ядро AVR и проверки радио
 date: '2026-10-24'
 tags: [MicroMusic, yoRadio]
+videos:
+  - label: Одного килобайта хватит всем!
+    url: https://youtu.be/WqFaOTUdEe0
 sources:
   - label: Общие профили AVR
     url: https://github.com/Witali/MicroMusic/commit/1c2172d2
