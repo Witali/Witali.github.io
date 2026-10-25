@@ -17,6 +17,9 @@
 
 # Post content
 
+- Do not publish ideas, proposals, speculative designs, or personal discussions from ChatGPT conversations unless the user explicitly authorizes publishing that specific material.
+- Use concrete, publicly documented project work as the source for daily posts. Access to a private conversation does not make its contents suitable for publication.
+
 - When project evidence supports it, mention concrete progress such as firmware size reductions, saved bytes, execution time, or memory use.
 - Prefer measured before/after values and name the relevant profile or test conditions. Distinguish emulator results, hardware results, and experimental prototypes.
 - Keep each daily post within ten sentences. Store posts in `content/posts/YYYY-MM-DD-short-name.md`.
