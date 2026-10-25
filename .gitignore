@@ -1,0 +1,7 @@
+/.worktree/
+/node_modules/
+/.npm-cache/
+/dist/
+/artifacts/
+*.log
+.DS_Store
