@@ -23,6 +23,10 @@ async function loadMore() {
         button.hidden = true;
         observer?.disconnect();
         document.querySelector('.feed-end').hidden = false;
+      } else if (observer) {
+        // Re-observe so a short batch can fill a viewport that is still near the end.
+        observer.unobserve(button);
+        observer.observe(button);
       }
     } catch {
       status.textContent = 'Не удалось загрузить записи. Попробуйте ещё раз или откройте архив.';
