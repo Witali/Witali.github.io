@@ -16,6 +16,7 @@
 @media(max-width:760px){.projects-page .project-section{padding-top:35px}.projects-page h1{font-size:29px;letter-spacing:-1px}}
 @media(max-width:520px){nav a[href$="#about"]{display:none}}
 body{overflow-anchor:none}
+.month-break{margin-top:40px;padding-top:18px;border-top:1px solid var(--line)}
 .project-links a,.sources a{display:inline-flex;align-items:center;gap:6px}.project-link-icon{width:18px;height:18px;object-fit:contain;border-radius:3px;flex-shrink:0}
 @media(max-width:420px){.brand{font-size:20px;gap:8px;letter-spacing:-.7px}.brand-icon{width:24px;height:24px;flex-shrink:0}.brand-dot{margin-left:-7px}nav{gap:12px;font-size:11px}.github-link{padding-left:12px}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

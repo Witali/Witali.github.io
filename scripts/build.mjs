@@ -24,11 +24,12 @@ const codeIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path 
 const videoLinks = (videos) => videos.length ? `<div class="video-links">${videos.map((video) => `<a class="video-link" href="${e(video.url)}"><span class="play-icon" aria-hidden="true">▶</span><span>${e(video.label)}</span><span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
 
 function renderPost(post, index) {
+  const month = index > 0 && posts[index - 1].date.slice(0, 7) !== post.date.slice(0, 7) ? `<p class="month-label month-break">${monthLabel(post.date)}</p>` : '';
   const postHtml = post.html.replaceAll('src="/assets/', `src="${basePath}/assets/`);
   const tags = post.tags.map((tag) => `<span class="tag">${e(tag)}</span>`).join('');
   const sources = post.sources.length ? `<div class="sources"><span>Проекты в записи</span>${post.sources.map((source) => `<a href="${e(source.url)}">${linkIcon(source.url)}${e(source.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
-  return `<article class="entry" id="${post.id}" data-tags="${e(post.tags.join('|'))}">
-    <div class="entry-date"><time datetime="${post.date}"><span class="day">${dateLabel(post.date, { day: '2-digit' })}</span><span>${dateLabel(post.date, { month: 'short' }).replace('.', '')}</span></time><span class="weekday">${dateLabel(post.date, { weekday: 'short' })}</span></div>
+  return `${month}<article class="entry" id="${post.id}" data-tags="${e(post.tags.join('|'))}">
+    <div class="entry-date"><time datetime="${post.date}" aria-label="${e(dateLabel(post.date, { day: 'numeric', month: 'long', year: 'numeric' }))}"><span class="day">${dateLabel(post.date, { day: '2-digit' })}</span><span>${dateLabel(post.date, { month: 'short' }).replace('.', '')}</span></time><span class="weekday">${dateLabel(post.date, { weekday: 'short' })}</span></div>
     <div class="entry-content"><div class="entry-meta">${tags}${index === 0 ? '<span class="latest">Свежая запись</span>' : ''}</div>
     <h3><a href="${basePath}/archive.html#${post.id}">${e(post.title)}</a></h3><div class="prose">${postHtml}</div>${videoLinks(post.videos)}${sources}</div>
   </article>`;
