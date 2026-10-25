@@ -73,12 +73,12 @@ ${projectsOnly ? renderProjects() : `
 </section>
 <section class="journal" id="journal" aria-labelledby="journal-title"><div class="journal-heading"><div><p class="eyebrow">Заметки с рабочего стола</p><h2 id="journal-title">Дневник разработки<span class="heading-dot">.</span></h2></div><a class="rss-link" href="${basePath}/feed.xml">RSS <span aria-hidden="true">↗</span></a></div>
 <div class="journal-layout"><div class="feed">
-<p class="month-label">${posts.length ? monthLabel(posts[0].date) : 'Первые записи скоро появятся'}<span id="post-count" aria-live="polite">${posts.length} записей</span></p>
+<p class="month-label">${posts.length ? monthLabel(posts[0].date) : 'Первые записи скоро появятся'}<span id="post-count" aria-live="polite">Всего записей: ${posts.length}</span></p>
 <div id="entries" data-next-page="${!archive && posts.length > 3 ? `${basePath}/entries/2.json` : ''}">${(archive ? posts : posts.slice(0, 3)).map(renderPost).join('\n')}</div>
 ${!archive && posts.length > 3 ? `<div class="load-more"><button id="load-more" type="button" hidden>Показать ещё записи <span aria-hidden="true">↓</span></button><p id="load-status" role="status"></p><a class="archive-link" href="${basePath}/archive.html#journal">Все записи в архиве ↗</a></div>` : ''}
 <p class="feed-end" ${!archive && posts.length > 3 ? 'hidden' : ''}><span></span>Пока всё. Продолжение — на верстаке.<span></span></p></div>
 <aside class="sidebar" aria-label="О дневнике"><div class="sidebar-note"><span class="small-code">${codeIcon}</span><h3>Впихнуть невпихуемое</h3><p>Музыка на крошечном AVR, звук на Z80 и другие задачи, которые слишком интересны, чтобы их отложить.</p><span class="handwritten">Проверяю на практике.</span></div>
-<div class="projects"><p class="eyebrow">На верстаке</p><a href="https://github.com/Witali/MicroMusic"><span>MicroMusic<small>Музыка на маленьких процессорах</small></span>↗</a><a href="https://github.com/Witali/Web-MIDI-Player"><span>Web MIDI Player<small>Синтезатор прямо в браузере</small></span>↗</a><a href="https://github.com/Witali/yoRadio"><span>yoRadio<small>Радио, экраны и ESP32</small></span>↗</a></div>
+<div class="projects"><p class="eyebrow">На верстаке</p><a href="https://witali.github.io/MicroMusic/"><span>${linkIcon('https://witali.github.io/MicroMusic/')}MicroMusic<small>Музыка на маленьких процессорах</small></span>↗</a><a href="https://witali.github.io/Web-MIDI-Player/"><span>${linkIcon('https://witali.github.io/Web-MIDI-Player/')}Web MIDI Player<small>Синтезатор прямо в браузере</small></span>↗</a><a href="https://github.com/Witali/yoRadio"><span>yoRadio<small>Радио, экраны и ESP32</small></span>↗</a></div>
 <a class="all-projects" href="${basePath}/projects.html">Все проекты <span aria-hidden="true">↗</span></a>
 <p class="sidebar-caption">Коротко о сделанном.<br>Свежие записи — сверху.</p></aside></div></section>
 `}
