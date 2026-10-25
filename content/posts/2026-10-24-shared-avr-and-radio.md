@@ -1,16 +1,18 @@
 ---
 title: Общее ядро AVR и проверки радио
 date: '2026-10-24'
-tags: [MicroMusic, yoRadio]
+tags:
+  - MicroMusic
+  - yoRadio
 videos:
   - label: Одного килобайта хватит всем!
-    url: https://youtu.be/WqFaOTUdEe0
+    url: 'https://youtu.be/WqFaOTUdEe0'
     published: '2026-10-24'
 sources:
-  - label: Общие профили AVR
-    url: https://github.com/Witali/MicroMusic/commit/1c2172d2
-  - label: Интеграция Speex
-    url: https://github.com/Witali/MicroMusic/commit/89940034
+  - label: MicroMusic — плееры
+    url: 'https://witali.github.io/MicroMusic/'
+  - label: yoRadio / Small TV
+    url: 'https://github.com/Witali/yoRadio'
 ---
 Объединил эмуляцию AVR вокруг общего ядра с профилями ATtiny13A и ATtiny88.
 Проверил эквивалентность полных музыкальных произведений между профилями и движками.

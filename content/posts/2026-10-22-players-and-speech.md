@@ -1,12 +1,14 @@
 ---
 title: Одна мастерская для разных процессоров
 date: '2026-10-22'
-tags: [MicroMusic, Z80]
+tags:
+  - MicroMusic
+  - Z80
 sources:
-  - label: Общая страница плееров
-    url: https://github.com/Witali/MicroMusic/commit/37da8a4a
-  - label: Речь HQ4
-    url: https://github.com/Witali/MicroMusic/commit/9606f6eb
+  - label: MicroMusic — плееры
+    url: 'https://witali.github.io/MicroMusic/'
+  - label: Z80 Lab
+    url: 'https://rudolff.bitbucket.io/'
 ---
 Собрал общую главную страницу плееров MicroMusic.
 Добавил воспроизведение речевых прошивок HQ4 в движках JavaScript и WASM и подготовил каталог для GitHub Pages.

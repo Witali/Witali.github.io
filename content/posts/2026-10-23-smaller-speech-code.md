@@ -1,12 +1,14 @@
 ---
 title: Сэкономленные байты в речевом ядре
 date: '2026-10-23'
-tags: [MicroMusic, yoRadio]
+tags:
+  - MicroMusic
+  - yoRadio
 sources:
-  - label: Уменьшение речевого ядра
-    url: https://github.com/Witali/MicroMusic/commit/eec9bc5a
-  - label: Кэш фотографий Small TV
-    url: https://github.com/Witali/yoRadio/commit/d6adaa7d3
+  - label: MicroMusic — плееры
+    url: 'https://witali.github.io/MicroMusic/'
+  - label: yoRadio / Small TV
+    url: 'https://github.com/Witali/yoRadio'
 ---
 Продолжил уменьшать речевые декодеры для AVR и проверять, что экономия памяти не меняет полученный звук.
 В экспериментальном речевом ядре Q3 получил **392 → 368 байт: минус 24 байта, около 6%**, с неизменным PCM.

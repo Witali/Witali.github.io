@@ -1,12 +1,14 @@
 ---
 title: Звук на Z80 — даже без оперативной памяти
 date: '2026-10-18'
-tags: [Z80, Web MIDI]
+tags:
+  - Z80
+  - Web MIDI
 sources:
-  - label: Конвертер для Z80
-    url: https://rudolff.bitbucket.io/converter/
-  - label: DSP в Web MIDI Player
-    url: https://github.com/Witali/Web-MIDI-Player/commit/e7a7b88
+  - label: Z80 Lab
+    url: 'https://rudolff.bitbucket.io/'
+  - label: Web MIDI Player
+    url: 'https://witali.github.io/Web-MIDI-Player/'
 ---
 Добавил в браузерный конвертер Z80 запись с микрофона, предварительное прослушивание и выбор звукового выхода PDM или R2R.
 Продолжил эксперименты с повышением частоты PDM и сжатием повторяющихся MIDI-фрагментов без потерь.

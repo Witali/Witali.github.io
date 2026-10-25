@@ -1,12 +1,14 @@
 ---
 title: У MIDI-плеера появилось своё имя
 date: '2026-10-19'
-tags: [Web MIDI, Z80]
+tags:
+  - Web MIDI
+  - Z80
 sources:
   - label: Web MIDI Player
-    url: https://github.com/Witali/Web-MIDI-Player/commit/08a7877
-  - label: Загрузка сэмплов по запросу
-    url: https://github.com/Witali/Web-MIDI-Player/commit/90a68dd
+    url: 'https://witali.github.io/Web-MIDI-Player/'
+  - label: Z80 Lab
+    url: 'https://rudolff.bitbucket.io/'
 ---
 Переименовал браузерный музыкальный проект в Web MIDI Player и добавил публичную коллекцию MIDI с указанием источников и прав.
 Сэмплы SoundFont теперь загружаются по мере необходимости.

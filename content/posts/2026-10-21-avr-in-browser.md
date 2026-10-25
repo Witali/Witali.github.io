@@ -1,12 +1,14 @@
 ---
 title: AVR переезжает в WebAssembly
 date: '2026-10-21'
-tags: [MicroMusic, Web MIDI]
+tags:
+  - MicroMusic
+  - Web MIDI
 sources:
-  - label: AVR на C и WASM
-    url: https://github.com/Witali/MicroMusic/commit/27949ac3
-  - label: Публикация Web MIDI Player
-    url: https://github.com/Witali/Web-MIDI-Player/commit/f9fa181
+  - label: MicroMusic — плееры
+    url: 'https://witali.github.io/MicroMusic/'
+  - label: Web MIDI Player
+    url: 'https://witali.github.io/Web-MIDI-Player/'
 ---
 В MicroMusic перенёс эмуляцию AVR и фильтрацию звука в ядро на C, которое работает в браузере через WebAssembly.
 Добавил выбор между движками JavaScript и WASM, а затем сделал WASM вариантом по умолчанию.

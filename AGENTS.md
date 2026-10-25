@@ -17,6 +17,9 @@
 
 # Post content
 
+- Use Git logs to verify dates and completed work, but do not put links to individual commits or commit-pinned files in blog posts.
+- Link every project mentioned in a post to its public project page and, when useful, its source repository. Prefer the published demo or project website when available.
+- Show a project's own icon beside its links when one is available. Do not invent a project logo or substitute a generic service avatar.
 - Do not publish ideas, proposals, speculative designs, or personal discussions from ChatGPT conversations unless the user explicitly authorizes publishing that specific material.
 - Use concrete, publicly documented project work as the source for daily posts. Access to a private conversation does not make its contents suitable for publication.
 

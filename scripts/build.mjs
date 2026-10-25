@@ -23,7 +23,7 @@ const videoLinks = (videos) => videos.length ? `<div class="video-links">${video
 function renderPost(post, index) {
   const postHtml = post.html.replaceAll('src="/assets/', `src="${basePath}/assets/`);
   const tags = post.tags.map((tag) => `<span class="tag">${e(tag)}</span>`).join('');
-  const sources = post.sources.length ? `<div class="sources"><span>По следам работы</span>${post.sources.map((source) => `<a href="${e(source.url)}">${e(source.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
+  const sources = post.sources.length ? `<div class="sources"><span>Проекты в записи</span>${post.sources.map((source) => `<a href="${e(source.url)}">${e(source.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
   return `<article class="entry" id="${post.id}" data-tags="${e(post.tags.join('|'))}">
     <div class="entry-date"><time datetime="${post.date}"><span class="day">${dateLabel(post.date, { day: '2-digit' })}</span><span>${dateLabel(post.date, { month: 'short' }).replace('.', '')}</span></time><span class="weekday">${dateLabel(post.date, { weekday: 'short' })}</span></div>
     <div class="entry-content"><div class="entry-meta">${tags}${index === 0 ? '<span class="latest">Свежая запись</span>' : ''}</div>
