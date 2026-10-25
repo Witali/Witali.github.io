@@ -77,6 +77,7 @@ export async function loadProjects(directory) {
   const projects = await Promise.all(files.map(async (file) => {
     const { data, content } = matter(await readFile(path.join(directory, file), 'utf8'));
     if (!data.title || !data.category || !Number.isInteger(data.order) || !content.trim()) throw new Error(`${file}: project title, category, order and description are required`);
+    if (data.icon && !/^project-icons\/[a-z0-9-]+\.(svg|png|webp)$/.test(data.icon)) throw new Error(`${file}: use a local project icon`);
     return { ...data, id: file.replace(/\.md$/, ''), html: markdown.render(content),
       links: links(data.links, file), videos: links(data.videos, file, { youtube: true }) };
   }));

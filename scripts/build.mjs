@@ -14,6 +14,9 @@ const projects = await loadProjects(path.join(root, 'content/projects'));
 const basePath = (process.env.SITE_BASE_PATH ?? config.basePath).replace(/\/$/, '');
 if (basePath && !/^\/[a-zA-Z0-9_/-]+$/.test(basePath)) throw new Error('SITE_BASE_PATH must be empty or an absolute URL path');
 const asset = (file) => `${basePath}/assets/${file}`;
+const normalizeLink = (url) => url.replace(/\/$/, '');
+const projectIcons = new Map(projects.flatMap((project) => project.icon ? project.links.map((link) => [normalizeLink(link.url), project.icon]) : []));
+const linkIcon = (url) => projectIcons.has(normalizeLink(url)) ? `<img class="project-link-icon" src="${e(asset(projectIcons.get(normalizeLink(url))))}" width="18" height="18" alt="" loading="lazy">` : '';
 const siteUrl = `${(process.env.SITE_ORIGIN || config.url).replace(/\/$/, '')}${basePath}/`;
 const dateLabel = (date, options) => new Intl.DateTimeFormat('ru', { timeZone: 'UTC', ...options }).format(new Date(`${date}T12:00:00Z`));
 const monthLabel = (date) => dateLabel(date, { month: 'long', year: 'numeric' }).replace(' г.', '');
@@ -23,7 +26,7 @@ const videoLinks = (videos) => videos.length ? `<div class="video-links">${video
 function renderPost(post, index) {
   const postHtml = post.html.replaceAll('src="/assets/', `src="${basePath}/assets/`);
   const tags = post.tags.map((tag) => `<span class="tag">${e(tag)}</span>`).join('');
-  const sources = post.sources.length ? `<div class="sources"><span>Проекты в записи</span>${post.sources.map((source) => `<a href="${e(source.url)}">${e(source.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
+  const sources = post.sources.length ? `<div class="sources"><span>Проекты в записи</span>${post.sources.map((source) => `<a href="${e(source.url)}">${linkIcon(source.url)}${e(source.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
   return `<article class="entry" id="${post.id}" data-tags="${e(post.tags.join('|'))}">
     <div class="entry-date"><time datetime="${post.date}"><span class="day">${dateLabel(post.date, { day: '2-digit' })}</span><span>${dateLabel(post.date, { month: 'short' }).replace('.', '')}</span></time><span class="weekday">${dateLabel(post.date, { weekday: 'short' })}</span></div>
     <div class="entry-content"><div class="entry-meta">${tags}${index === 0 ? '<span class="latest">Свежая запись</span>' : ''}</div>
@@ -32,7 +35,7 @@ function renderPost(post, index) {
 }
 
 function renderProject(project, index) {
-  return `<article class="project-card" id="project-${e(project.id)}"><div class="project-card-top"><span class="project-number">${String(index + 1).padStart(2, '0')}</span><span>${e(project.category)}</span></div><h3>${e(project.title)}</h3><div class="prose">${project.html}</div><div class="project-links">${project.links.map((link) => `<a href="${e(link.url)}">${e(link.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>${videoLinks(project.videos)}</article>`;
+  return `<article class="project-card" id="project-${e(project.id)}"><div class="project-card-top"><span class="project-number">${String(index + 1).padStart(2, '0')}</span><span>${e(project.category)}</span></div><h3>${e(project.title)}</h3><div class="prose">${project.html}</div><div class="project-links">${project.links.map((link) => `<a href="${e(link.url)}">${linkIcon(link.url)}${e(link.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>${videoLinks(project.videos)}</article>`;
 }
 
 function renderProjects() {

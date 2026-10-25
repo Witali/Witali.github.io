@@ -4,14 +4,15 @@ category: AVR · Intel 8080 · звук
 order: 1
 links:
   - label: Код и документация
-    url: https://github.com/Witali/MicroMusic
+    url: 'https://github.com/Witali/MicroMusic'
   - label: Плееры
-    url: https://witali.github.io/MicroMusic/
+    url: 'https://witali.github.io/MicroMusic/'
 videos:
   - label: Проверяю прошивку на ATtiny88
-    url: https://www.youtube.com/watch?v=_8-hYX5qNTs
+    url: 'https://www.youtube.com/watch?v=_8-hYX5qNTs'
   - label: Одного килобайта хватит всем!
-    url: https://youtu.be/WqFaOTUdEe0
+    url: 'https://youtu.be/WqFaOTUdEe0'
+icon: project-icons/micromusic.svg
 ---
 Музыка и речь на ATtiny13A, ATtiny88 и Intel 8080 при очень небольшом запасе памяти.
 Разрабатываю прошивки, компактные кодеки и браузерные эмуляторы, чтобы результат можно было сразу послушать.
