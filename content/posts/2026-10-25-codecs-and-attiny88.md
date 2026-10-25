@@ -3,6 +3,8 @@ title: Кодеки и музыка на ATtiny88
 date: '2026-10-25'
 tags: [MicroMusic, yoRadio]
 videos:
+  - label: Проверяю прошивку на ATtiny88
+    url: https://www.youtube.com/watch?v=_8-hYX5qNTs
   - label: Музыка на крошечном AVR
     url: https://youtu.be/WqFaOTUdEe0
 sources:

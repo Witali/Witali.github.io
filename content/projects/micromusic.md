@@ -8,6 +8,8 @@ links:
   - label: Плееры
     url: https://witali.github.io/MicroMusic/
 videos:
+  - label: Проверяю прошивку на ATtiny88
+    url: https://www.youtube.com/watch?v=_8-hYX5qNTs
   - label: Одного килобайта хватит всем!
     url: https://youtu.be/WqFaOTUdEe0
 ---
