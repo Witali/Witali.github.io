@@ -3,6 +3,8 @@ title: Аналоговые усилители
 category: Аналоговая схемотехника · SPICE
 order: 9
 links:
+  - label: Открыть сайт
+    url: https://witali.github.io/power-amp/
   - label: Схемы и моделирование
     url: https://github.com/Witali/power-amp
 ---
