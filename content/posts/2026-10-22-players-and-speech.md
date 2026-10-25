@@ -2,9 +2,6 @@
 title: Одна мастерская для разных процессоров
 date: '2026-10-22'
 tags: [MicroMusic, Z80]
-videos:
-  - label: Видео о MicroMusic
-    url: https://youtu.be/WqFaOTUdEe0
 sources:
   - label: Общая страница плееров
     url: https://github.com/Witali/MicroMusic/commit/37da8a4a

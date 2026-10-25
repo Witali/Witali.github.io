@@ -2,11 +2,6 @@
 title: Звук на Z80 — даже без оперативной памяти
 date: '2026-10-18'
 tags: [Z80, Web MIDI]
-videos:
-  - label: Звук на Z80 без ОЗУ
-    url: https://youtu.be/EdsZJjzSH34
-  - label: Исследование R36SX
-    url: https://youtu.be/LYrICpUo6_A
 sources:
   - label: Конвертер для Z80
     url: https://rudolff.bitbucket.io/converter/

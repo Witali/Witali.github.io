@@ -2,9 +2,6 @@
 title: Сэкономленные байты в речевом ядре
 date: '2026-10-23'
 tags: [MicroMusic, yoRadio]
-videos:
-  - label: Видео о MicroMusic
-    url: https://youtu.be/WqFaOTUdEe0
 sources:
   - label: Уменьшение речевого ядра
     url: https://github.com/Witali/MicroMusic/commit/eec9bc5a

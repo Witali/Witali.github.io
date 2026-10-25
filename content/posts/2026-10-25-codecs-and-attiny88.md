@@ -5,8 +5,7 @@ tags: [MicroMusic, yoRadio]
 videos:
   - label: Проверяю прошивку на ATtiny88
     url: https://www.youtube.com/watch?v=_8-hYX5qNTs
-  - label: Музыка на крошечном AVR
-    url: https://youtu.be/WqFaOTUdEe0
+    published: '2026-10-25'
 sources:
   - label: Прошивки UM88
     url: https://github.com/Witali/MicroMusic/commit/334f2a17

@@ -16,13 +16,21 @@ export function localDay(now = new Date(), timeZone = 'Europe/Budapest') {
   return ['year', 'month', 'day'].map((name) => parts.find((part) => part.type === name).value).join('-');
 }
 
+function youtubeVideoId(value) {
+  const url = new URL(value);
+  if (url.hostname === 'youtu.be') return url.pathname.slice(1).split('/')[0];
+  if (!['youtube.com', 'www.youtube.com'].includes(url.hostname)) return null;
+  if (url.pathname === '/watch') return url.searchParams.get('v');
+  return /^\/(?:shorts|embed|live)\/([\w-]{11})(?:\/|$)/.exec(url.pathname)?.[1];
+}
+
 function links(value, filename, { youtube = false } = {}) {
   if (value == null) return [];
   if (!Array.isArray(value) || value.some((link) => {
     try {
       const url = new URL(link.url);
       return typeof link.label !== 'string' || !link.label.trim() || url.protocol !== 'https:' ||
-        (youtube && !['youtube.com', 'www.youtube.com', 'youtu.be'].includes(url.hostname));
+        (youtube && !/^[\w-]{11}$/.test(youtubeVideoId(link.url) ?? ''));
     } catch { return true; }
   })) throw new Error(`${filename}: links need a label and a valid ${youtube ? 'YouTube' : 'HTTPS'} URL`);
   return value;
@@ -53,9 +61,13 @@ export function parsePost(source, filename) {
   const sentences = [...new Intl.Segmenter('ru', { granularity: 'sentence' }).segment(text)]
     .filter((item) => item.segment.trim()).length;
   if (!text.trim() || sentences > 10) throw new Error(`${filename}: use 1–10 sentences (found ${sentences})`);
+  const videos = links(data.videos, filename, { youtube: true });
+  for (const video of videos) {
+    if (video.published !== date) throw new Error(`${filename}: video publication date must match the post date`);
+  }
   return {
     title: data.title.trim(), date, tags: [...new Set(data.tags)], sources: links(data.sources, filename),
-    videos: links(data.videos, filename, { youtube: true }),
+    videos,
     id: `post-${match[1]}-${match[2]}`, filename, text, sentences, html: markdown.render(content),
   };
 }
@@ -75,5 +87,13 @@ export async function loadPosts(directory, { now = new Date(), timeZone } = {}) 
   const today = localDay(now, timeZone);
   const files = (await readdir(directory)).filter((file) => file.endsWith('.md'));
   const posts = await Promise.all(files.map(async (file) => parsePost(await readFile(path.join(directory, file), 'utf8'), file)));
+  const linkedVideos = new Set();
+  for (const post of posts) {
+    for (const video of post.videos) {
+      const id = youtubeVideoId(video.url);
+      if (linkedVideos.has(id)) throw new Error(`${post.filename}: video is already linked in another post`);
+      linkedVideos.add(id);
+    }
+  }
   return posts.filter((post) => post.date <= today).sort((a, b) => b.date.localeCompare(a.date) || a.filename.localeCompare(b.filename));
 }

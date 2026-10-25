@@ -23,3 +23,5 @@
 - When project evidence supports it, mention concrete progress such as firmware size reductions, saved bytes, execution time, or memory use.
 - Prefer measured before/after values and name the relevant profile or test conditions. Distinguish emulator results, hardware results, and experimental prototypes.
 - Keep each daily post within ten sentences. Store posts in `content/posts/YYYY-MM-DD-short-name.md`.
+- Link a YouTube video in a daily post only when that video was published on that post's date. Verify the publication date and record it as `published: 'YYYY-MM-DD'` in the video's metadata.
+- Do not repeat the same video across daily posts. If no video was published that day, omit video links. Project pages may keep relevant videos independently of their publication dates.

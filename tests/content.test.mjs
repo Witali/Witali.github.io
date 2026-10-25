@@ -36,7 +36,23 @@ test('renders Markdown while keeping HTML and unsafe links inert', () => {
 });
 
 test('video metadata accepts YouTube links and rejects other hosts', () => {
-  const video = (url) => source('2026-10-25').replace('tags: [AVR]', `tags: [AVR]\nvideos:\n  - label: Видео\n    url: ${url}`);
+  const video = (url) => source('2026-10-25').replace('tags: [AVR]', `tags: [AVR]\nvideos:\n  - label: Видео\n    url: ${url}\n    published: '2026-10-25'`);
   assert.equal(parsePost(video('https://youtu.be/WqFaOTUdEe0'), '2026-10-25-entry.md').videos.length, 1);
   assert.throws(() => parsePost(video('https://example.com/'), '2026-10-25-entry.md'), /YouTube/);
+});
+
+test('video publication dates must match the daily post', () => {
+  const video = (published) => source('2026-10-25').replace('tags: [AVR]', `tags: [AVR]\nvideos:\n  - label: Видео\n    url: https://youtu.be/WqFaOTUdEe0\n    published: '${published}'`);
+  assert.throws(() => parsePost(video('2026-10-24'), '2026-10-25-entry.md'), /publication date must match/);
+});
+
+test('the same video cannot be repeated using short and full YouTube URLs', async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'blog-videos-'));
+  try {
+    for (const [date, url] of [['2026-10-24', 'https://youtu.be/WqFaOTUdEe0'], ['2026-10-25', 'https://www.youtube.com/watch?v=WqFaOTUdEe0']]) {
+      const post = source(date).replace('tags: [AVR]', `tags: [AVR]\nvideos:\n  - label: Видео\n    url: ${url}\n    published: '${date}'`);
+      await writeFile(path.join(directory, `${date}-entry.md`), post);
+    }
+    await assert.rejects(loadPosts(directory), /already linked in another post/);
+  } finally { await rm(directory, { recursive: true, force: true }); }
 });
