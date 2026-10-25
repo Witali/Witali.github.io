@@ -13,6 +13,7 @@
 - Verify repository visibility before including a project or using it as a source. If its public status cannot be confirmed, omit it until the user explicitly allows disclosure.
 - General approval to publish a post does not authorize disclosure of a private project. Ask for specific authorization if private-project material is needed.
 - Before publishing, check both the generated site and the files and Git history being uploaded for private-project information.
+- Run `npm run check:public` before publication. The build also checks GitHub links against `content/public-sources.json` locally, without making network requests. Add an entry only after independently verifying public visibility; reconfirm visibility before publication.
 
 # Post content
 

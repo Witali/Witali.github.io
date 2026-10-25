@@ -3,8 +3,10 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { escapeHtml as e, loadPosts, loadProjects, markdown } from './content.mjs';
+import { verifyPublicSources } from './privacy.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+await verifyPublicSources(root);
 const config = JSON.parse(await readFile(path.join(root, 'site.config.json'), 'utf8'));
 const posts = await loadPosts(path.join(root, 'content/posts'), { timeZone: config.timeZone });
 const intro = matter(await readFile(path.join(root, 'content/intro.md'), 'utf8'));

@@ -1,0 +1,13 @@
+{
+  "checkedOn": "2026-10-25",
+  "repositories": [
+    "Witali/MicroMusic",
+    "Witali/yoRadio",
+    "Witali/Web-MIDI-Player",
+    "Witali/ZX-video",
+    "Witali/QEMU-ESP32",
+    "Witali/r36sx_disasm",
+    "Witali/micronucleus",
+    "Witali/power-amp"
+  ]
+}
