@@ -4,6 +4,7 @@ import { fileURLToPath } from 'node:url';
 import matter from 'gray-matter';
 import { escapeHtml as e, loadPosts, loadProjects, markdown } from './content.mjs';
 import { verifyPublicSources } from './privacy.mjs';
+import { analyticsId, analyticsScript, analyticsConsent } from './analytics.mjs';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
 await verifyPublicSources(root);
@@ -18,6 +19,7 @@ const normalizeLink = (url) => url.replace(/\/$/, '');
 const projectIcons = new Map(projects.flatMap((project) => project.icon ? project.links.map((link) => [normalizeLink(link.url), project.icon]) : []));
 const linkIcon = (url) => projectIcons.has(normalizeLink(url)) ? `<img class="project-link-icon" src="${e(asset(projectIcons.get(normalizeLink(url))))}" width="18" height="18" alt="" loading="lazy">` : '';
 const siteUrl = `${(process.env.SITE_ORIGIN || config.url).replace(/\/$/, '')}${basePath}/`;
+const measurementId = analyticsId(process.env.GA4_MEASUREMENT_ID);
 const dateLabel = (date, options) => new Intl.DateTimeFormat('ru', { timeZone: 'UTC', ...options }).format(new Date(`${date}T12:00:00Z`));
 const monthLabel = (date) => dateLabel(date, { month: 'long', year: 'numeric' }).replace(' г.', '');
 const codeIcon = '<svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -47,9 +49,13 @@ function renderProjects() {
   return `<section class="project-section" id="projects" aria-labelledby="projects-title"><div class="journal-heading"><div><p class="eyebrow">Публичные репозитории и разработки</p><h1 id="projects-title">Мои проекты<span class="heading-dot">.</span></h1></div><span class="project-total">${count} ${noun}</span></div><p class="section-description">Мои публичные проекты: маленькие процессоры, музыка, эмуляторы, аналоговое железо и веб-приложения.</p><div class="project-grid">${current.map(renderProject).join('\n')}</div>${bitbucket.length ? `<h2 class="project-group-title" id="bitbucket-projects">Ещё проекты на Bitbucket</h2><div class="project-grid">${bitbucket.map((project, index) => renderProject(project, current.length + index)).join('\n')}</div>` : ''}</section>`;
 }
 
-function renderPage(archive = false, projectsOnly = false) {
-const pageUrl = projectsOnly ? `${siteUrl}projects.html` : archive ? `${siteUrl}archive.html` : siteUrl;
-const title = projectsOnly ? `${config.title} — проекты` : `${config.title} — дневник разработки`;
+function renderPage(view = 'home') {
+const archive = view === 'archive';
+const projectsOnly = view === 'projects';
+const privacyOnly = view === 'privacy';
+const compact = projectsOnly || privacyOnly;
+const pageUrl = compact ? `${siteUrl}${view}.html` : archive ? `${siteUrl}archive.html` : siteUrl;
+const title = projectsOnly ? `${config.title} — проекты` : privacyOnly ? `${config.title} — конфиденциальность` : `${config.title} — дневник разработки`;
 return `<!doctype html>
 <html lang="ru"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
@@ -60,13 +66,19 @@ return `<!doctype html>
 <meta property="og:title" content="${e(title)}"><meta property="og:description" content="${e(config.description)}">
 <meta property="og:type" content="website"><meta property="og:locale" content="ru_RU"><meta property="og:url" content="${e(pageUrl)}">
 <meta property="og:image" content="${e(new URL(asset('workbench.png'), siteUrl).href)}">
-<link rel="stylesheet" href="${asset('styles.css')}">${projectsOnly ? '' : `<script src="${asset('journal.js')}" defer></script>`}
+<link rel="stylesheet" href="${asset('styles.css')}">${compact ? '' : `<script src="${asset('journal.js')}" defer></script>`}
+${analyticsScript(measurementId, basePath, siteUrl)}
 </head><body id="top">
-<a class="skip-link" href="${projectsOnly ? '#projects' : '#journal'}">${projectsOnly ? 'К проектам' : 'К записям'}</a>
-<header class="site-header wrap"><a class="brand" href="${projectsOnly ? `${basePath}/` : '#top'}"><span class="brand-icon">${codeIcon}</span>${e(config.title)}<span class="brand-dot">.</span></a>
-<nav aria-label="Основная навигация"><a${projectsOnly ? '' : ' class="current"'} href="${projectsOnly ? `${basePath}/#journal` : '#journal'}">Дневник</a><a${projectsOnly ? ' class="current" aria-current="page"' : ''} href="${basePath}/projects.html">Проекты</a><a href="${projectsOnly ? `${basePath}/#about` : '#about'}">Об авторе</a><a class="github-link" href="${e(config.github)}">GitHub <span aria-hidden="true">↗</span></a></nav></header>
-<main class="wrap${projectsOnly ? ' projects-page' : ''}">
-${projectsOnly ? renderProjects() : `
+<a class="skip-link" href="${privacyOnly ? '#privacy' : projectsOnly ? '#projects' : '#journal'}">${privacyOnly ? 'К тексту' : projectsOnly ? 'К проектам' : 'К записям'}</a>
+<header class="site-header wrap"><a class="brand" href="${compact ? `${basePath}/` : '#top'}"><span class="brand-icon">${codeIcon}</span>${e(config.title)}<span class="brand-dot">.</span></a>
+<nav aria-label="Основная навигация"><a${compact ? '' : ' class="current"'} href="${compact ? `${basePath}/#journal` : '#journal'}">Дневник</a><a${projectsOnly ? ' class="current" aria-current="page"' : ''} href="${basePath}/projects.html">Проекты</a><a href="${compact ? `${basePath}/#about` : '#about'}">Об авторе</a><a class="github-link" href="${e(config.github)}">GitHub <span aria-hidden="true">↗</span></a></nav></header>
+<main class="wrap${compact ? ' projects-page' : ''}">
+${privacyOnly ? `<section class="privacy-page prose" id="privacy"><p class="eyebrow">О данных посетителей</p><h1>Конфиденциальность</h1>
+<p>Google Analytics 4 помогает понять, какие страницы блога читают и как используют сайт.</p>
+<h2>Ваш выбор</h2><p>Google Analytics загружается только после нажатия «Разрешить». Если вы отклоните сбор статистики, код Google Analytics не загружается. Изменить выбор можно кнопкой «Настройки аналитики» внизу страницы.</p>
+<h2>Что попадает в статистику</h2><p>Посещения страниц, действия на сайте и технические сведения о браузере и устройстве обрабатываются Google. В адресе страницы, передаваемом счётчику, убраны параметры запроса и фрагмент после #; для источника перехода передаётся только адрес сайта. Рекламная персонализация и Google Signals отключены.</p>
+<h2>Хранение в браузере</h2><p>Выбор сохраняется в этом браузере на 180 дней. После согласия Google Analytics может сохранять cookies с префиксом pogromist для распознавания посещений; срок их действия настроен на 180 дней. При отзыве согласия эти cookies удаляются и страница перезагружается без счётчика.</p>
+<p>Подробнее: <a href="https://policies.google.com/technologies/partner-sites">как Google использует данные с сайтов, работающих с его сервисами</a>.</p></section>` : projectsOnly ? renderProjects() : `
 <section class="intro" id="about" aria-labelledby="intro-title">
 <div class="intro-copy"><p class="eyebrow"><span class="status-dot"></span>${e(intro.data.eyebrow)}</p><h1 id="intro-title">${e(intro.data.title)}</h1><div class="intro-text prose">${markdown.render(intro.content)}</div><a class="text-link" href="#journal">Что нового на верстаке <span aria-hidden="true">↓</span></a></div>
 <figure class="hero"><img src="${asset('workbench.png')}" width="1942" height="809" alt="Иллюстрация мастерской: программист с кружкой за столом, кот, микросхемы и ретрокомпьютеры" fetchpriority="high"><figcaption><span>Код. Паяльник. Ещё одна идея.</span><span>Личная территория экспериментов</span></figcaption></figure>
@@ -82,7 +94,8 @@ ${!archive && posts.length > 3 ? `<div class="load-more"><button id="load-more" 
 <a class="all-projects" href="${basePath}/projects.html">Все проекты <span aria-hidden="true">↗</span></a>
 <p class="sidebar-caption">Коротко о сделанном.<br>Свежие записи — сверху.</p></aside></div></section>
 `}
-</main><footer class="site-footer wrap"><p>© ${posts[0]?.date.slice(0, 4) ?? new Date().getUTCFullYear()} ${e(config.author)} <span>·</span> ${e(config.title)}</p><a href="#top">Наверх ↑</a></footer>
+</main><footer class="site-footer wrap"><p>© ${posts[0]?.date.slice(0, 4) ?? new Date().getUTCFullYear()} ${e(config.author)} <span>·</span> ${e(config.title)}</p><div class="footer-links">${measurementId ? `<a href="${basePath}/privacy.html">Конфиденциальность</a><button type="button" id="analytics-settings" aria-controls="analytics-consent" aria-expanded="false">Настройки аналитики</button>` : ''}<a href="#top">Наверх ↑</a></div></footer>
+${analyticsConsent(measurementId, basePath)}
 </body></html>`;
 }
 
@@ -93,8 +106,9 @@ const output = path.join(root, 'dist');
 await mkdir(output, { recursive: true });
 await cp(path.join(root, 'assets'), path.join(output, 'assets'), { recursive: true });
 await writeFile(path.join(output, 'index.html'), renderPage());
-await writeFile(path.join(output, 'archive.html'), renderPage(true));
-await writeFile(path.join(output, 'projects.html'), renderPage(false, true));
+await writeFile(path.join(output, 'archive.html'), renderPage('archive'));
+await writeFile(path.join(output, 'projects.html'), renderPage('projects'));
+await writeFile(path.join(output, 'privacy.html'), renderPage('privacy'));
 await mkdir(path.join(output, 'entries'), { recursive: true });
 for (let start = 3; start < posts.length; start += 3) {
   const page = start / 3 + 1;
