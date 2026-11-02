@@ -17,6 +17,7 @@
 
 # Post content
 
+- Omit Small TV from new posts until the user explicitly approves covering it again; the project is not ready to present yet.
 - Use Git logs to verify dates and completed work, but do not put links to individual commits or commit-pinned files in blog posts.
 - Link every project mentioned in a post to its public project page and, when useful, its source repository. Prefer the published demo or project website when available.
 - Show a project's own icon beside its links when one is available. Do not invent a project logo or substitute a generic service avatar.
