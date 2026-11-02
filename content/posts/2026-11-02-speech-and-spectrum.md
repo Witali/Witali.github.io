@@ -1,7 +1,6 @@
 ---
 title: Речь на Arduino Nano и музыкальная дискета для Spectrum
 date: '2026-11-02'
-draft: true
 tags:
   - MicroMusic
   - ZX Spectrum
