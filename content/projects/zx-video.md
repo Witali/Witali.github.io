@@ -2,7 +2,10 @@
 title: ZX-video
 category: ZX Spectrum · видео и звук
 order: 5
+icon: project-icons/zx-video.svg
 links:
+  - label: Онлайн-плеер
+    url: https://witali.github.io/ZX-video/
   - label: Код и примеры
     url: https://github.com/Witali/ZX-video
 ---

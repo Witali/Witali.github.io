@@ -1,14 +1,15 @@
 ---
 title: Речь на Arduino Nano и музыкальная дискета для Spectrum
 date: '2026-11-02'
+draft: true
 tags:
   - MicroMusic
   - ZX Spectrum
 sources:
   - label: MicroMusic — плееры
     url: 'https://witali.github.io/MicroMusic/'
-  - label: ZX-video — музыкальное меню
-    url: 'https://github.com/Witali/ZX-video/tree/main/music-menu'
+  - label: ZX-video — онлайн-плеер
+    url: 'https://witali.github.io/ZX-video/'
 ---
 За **26 октября — 2 ноября** в [MicroMusic](https://witali.github.io/MicroMusic/) появилась общая страница речевых примеров: выбираете одну из четырёх фраз и микроконтроллер, слушаете результат, сравниваете с оригиналом и видите осциллограмму всей записи.
 Для [Arduino Nano](https://witali.github.io/MicroMusic/web-player/?collection=hq4&device=atmega328p) подготовил **восемь готовых HEX-прошивок** — по компактному и более качественному LPX-варианту для каждой фразы, чтобы пример можно было скачать без самостоятельной сборки.
@@ -23,3 +24,6 @@ sources:
 А для [ZX Spectrum в проекте ZX-video](https://github.com/Witali/ZX-video/tree/main/music-menu) сделал **загрузочную дискету с музыкальным меню**: на Spectrum 128 с Beta Disk можно выбрать «Люмьер» или «Алисию» клавишами либо мышью Kempston, переключать мелодии во время воспроизведения и останавливать звук пробелом.
 Обе композиции заранее загружаются в память, поэтому переключение обходится без нового чтения дискеты; заодно исправил порядок записи регистров AY и сгладил переходы громкости.
 Полное воспроизведение обеих мелодий и переключения проверены в Fuse, так что начать знакомство можно с эмулятора и [готового TRD-образа](https://github.com/Witali/ZX-video/blob/main/ZX-Music-Menu.trd).
+
+Теперь [музыкальную дискету можно запустить прямо в браузере](https://witali.github.io/ZX-video/?disk=ZX-Music-Menu.trd): выложил онлайн-эмулятор **Spectrum 128 с AY-звуком и Beta Disk**, где доступен каталог из **250 TRD-образов проекта**.
+В настройках можно выбрать Canvas или WebGL и частоту среза RC-фильтра звука — **5, 10, 15 или 20 кГц**, по умолчанию 20 кГц.
