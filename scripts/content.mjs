@@ -57,6 +57,9 @@ export function parsePost(source, filename) {
   if (!Array.isArray(data.tags) || !data.tags.length || data.tags.some((tag) => typeof tag !== 'string')) {
     throw new Error(`${filename}: tags must be a nonempty string array`);
   }
+  if (data.draft != null && typeof data.draft !== 'boolean') {
+    throw new Error(`${filename}: draft must be true or false`);
+  }
   const text = plainText(content);
   const sentences = [...new Intl.Segmenter('ru', { granularity: 'sentence' }).segment(text)]
     .filter((item) => item.segment.trim()).length;
@@ -66,7 +69,7 @@ export function parsePost(source, filename) {
     if (video.published !== date) throw new Error(`${filename}: video publication date must match the post date`);
   }
   return {
-    title: data.title.trim(), date, tags: [...new Set(data.tags)], sources: links(data.sources, filename),
+    title: data.title.trim(), date, draft: data.draft === true, tags: [...new Set(data.tags)], sources: links(data.sources, filename),
     videos,
     id: `post-${match[1]}-${match[2]}`, filename, text, sentences, html: markdown.render(content),
   };
@@ -84,7 +87,7 @@ export async function loadProjects(directory) {
   return projects.sort((a, b) => a.order - b.order || a.id.localeCompare(b.id));
 }
 
-export async function loadPosts(directory, { now = new Date(), timeZone } = {}) {
+export async function loadPosts(directory, { now = new Date(), timeZone, includeDrafts = false } = {}) {
   const today = localDay(now, timeZone);
   const files = (await readdir(directory)).filter((file) => file.endsWith('.md'));
   const posts = await Promise.all(files.map(async (file) => parsePost(await readFile(path.join(directory, file), 'utf8'), file)));
@@ -96,5 +99,5 @@ export async function loadPosts(directory, { now = new Date(), timeZone } = {}) 
       linkedVideos.add(id);
     }
   }
-  return posts.filter((post) => post.date <= today).sort((a, b) => b.date.localeCompare(a.date) || a.filename.localeCompare(b.filename));
+  return posts.filter((post) => post.date <= today && (includeDrafts || !post.draft)).sort((a, b) => b.date.localeCompare(a.date) || a.filename.localeCompare(b.filename));
 }

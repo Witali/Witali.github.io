@@ -9,7 +9,10 @@ import { analyticsId, analyticsScript, analyticsConsent } from './analytics.mjs'
 const root = fileURLToPath(new URL('../', import.meta.url));
 await verifyPublicSources(root);
 const config = JSON.parse(await readFile(path.join(root, 'site.config.json'), 'utf8'));
-const posts = await loadPosts(path.join(root, 'content/posts'), { timeZone: config.timeZone });
+const posts = await loadPosts(path.join(root, 'content/posts'), {
+  timeZone: config.timeZone,
+  includeDrafts: process.env.INCLUDE_DRAFTS === '1',
+});
 const intro = matter(await readFile(path.join(root, 'content/intro.md'), 'utf8'));
 const projects = await loadProjects(path.join(root, 'content/projects'));
 const basePath = (process.env.SITE_BASE_PATH ?? config.basePath).replace(/\/$/, '');
@@ -32,7 +35,7 @@ function renderPost(post, index) {
   const sources = post.sources.length ? `<div class="sources"><span>Проекты в записи</span>${post.sources.map((source) => `<a href="${e(source.url)}">${linkIcon(source.url)}${e(source.label)} <span aria-hidden="true">↗</span></a>`).join('')}</div>` : '';
   return `${month}<article class="entry" id="${post.id}" data-tags="${e(post.tags.join('|'))}">
     <div class="entry-date"><time datetime="${post.date}" aria-label="${e(dateLabel(post.date, { day: 'numeric', month: 'long', year: 'numeric' }))}"><span class="day">${dateLabel(post.date, { day: '2-digit' })}</span><span>${dateLabel(post.date, { month: 'short' }).replace('.', '')}</span></time><span class="weekday">${dateLabel(post.date, { weekday: 'short' })}</span></div>
-    <div class="entry-content"><div class="entry-meta">${tags}${index === 0 ? '<span class="latest">Свежая запись</span>' : ''}</div>
+    <div class="entry-content"><div class="entry-meta">${tags}${post.draft ? '<span class="latest">Черновик · не опубликован</span>' : index === 0 ? '<span class="latest">Свежая запись</span>' : ''}</div>
     <h3><a href="${basePath}/archive.html#${post.id}">${e(post.title)}</a></h3><div class="prose">${postHtml}</div>${videoLinks(post.videos)}${sources}</div>
   </article>`;
 }

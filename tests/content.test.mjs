@@ -24,6 +24,20 @@ test('enforces the ten sentence limit', () => {
   assert.throws(() => parsePost(source('2026-10-25', 'Готово. '.repeat(11)), '2026-10-25-entry.md'), /1–10 sentences/);
 });
 
+test('drafts stay out of normal builds and require an explicit preview option', async () => {
+  const directory = await mkdtemp(path.join(os.tmpdir(), 'blog-drafts-'));
+  try {
+    await writeFile(path.join(directory, '2026-10-24-entry.md'), source('2026-10-24'));
+    await writeFile(path.join(directory, '2026-10-25-entry.md'), source('2026-10-25').replace('tags: [AVR]', 'tags: [AVR]\ndraft: true'));
+    const options = { now: new Date('2026-10-26T12:00:00Z') };
+    assert.deepEqual((await loadPosts(directory, options)).map((post) => post.date), ['2026-10-24']);
+    const preview = await loadPosts(directory, { ...options, includeDrafts: true });
+    assert.deepEqual(preview.map((post) => post.date), ['2026-10-25', '2026-10-24']);
+    assert.equal(preview[0].draft, true);
+    assert.throws(() => parsePost(source('2026-10-25').replace('tags: [AVR]', 'tags: [AVR]\ndraft: "false"'), '2026-10-25-entry.md'), /draft must be true or false/);
+  } finally { await rm(directory, { recursive: true, force: true }); }
+});
+
 test('rejects invalid dates and filenames that disagree with metadata', () => {
   assert.throws(() => parsePost(source('2026-02-30'), '2026-02-30-entry.md'), /date must be valid/);
   assert.throws(() => parsePost(source('2026-10-24'), '2026-10-25-entry.md'), /date must be valid/);
