@@ -19,7 +19,9 @@
     "Witali/webgl-example",
     "Witali/optiboot",
     "Optiboot/optiboot",
-    "MCUdude/MiniCore"
+    "MCUdude/MiniCore",
+    "stefanrueger/urboot",
+    "avrdudes/avrdude"
   ],
   "bitbucketRepositories": [
     "rudolff/pic_projects",

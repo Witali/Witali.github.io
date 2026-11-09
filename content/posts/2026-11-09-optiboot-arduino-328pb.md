@@ -15,6 +15,10 @@ sources:
     url: 'https://github.com/Witali/optiboot/blob/master/docs/arduino_nano_328pb_guide.md'
   - label: MiniCore
     url: 'https://github.com/MCUdude/MiniCore'
+  - label: Urboot
+    url: 'https://github.com/stefanrueger/urboot'
+  - label: AVRDUDE — urprotocol и urclock
+    url: 'https://avrdudes.github.io/avrdude/7.3/avrdude_1.html'
 ---
 При проверке [моего модифицированного Optiboot](https://github.com/Witali/optiboot) в Arduino IDE столкнулся с неожиданностью: внешне обычная Nano оказалась платой с **ATmega328PB**, а стандартный профиль Nano ожидал другую микросхему и отказывался загружать скетч.
 
@@ -33,13 +37,11 @@ sources:
 
 *ATmega328PB слева, ATmega328P справа — иллюстрация из документации проекта, нажмите для увеличения*
 
-Для поддержки PB добавил [адрес пакета MiniCore](https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json) в **File → Preferences → Additional Boards Manager URLs**, затем открыл **Boards Manager**, нашёл **MiniCore от MCUdude** и установил пакет.
+Для поддержки PB добавил [адрес пакета MiniCore](https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json) в **File → Preferences → Additional Boards Manager URLs**, затем открыл **Boards Manager**, нашёл **MiniCore от MCUdude** и установил пакет; в **Tools** выбрал настройки моей платы из [добавленной в Optiboot инструкции](https://github.com/Witali/optiboot/blob/master/docs/arduino_nano_328pb_guide.md).
 
 ```text
 https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json
 ```
-
-В **Tools** выбрал настройки моей платы из [добавленной в Optiboot инструкции](https://github.com/Witali/optiboot/blob/master/docs/arduino_nano_328pb_guide.md).
 
 | Настройка | Значение |
 | --- | --- |
@@ -60,3 +62,5 @@ https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json
 ```sh
 avrdude -c arduino -p m328pb -P PORT -b 115200 -D -U flash:w:sketch.hex:i
 ```
+
+Заодно узнал о [Urboot](https://github.com/stefanrueger/urboot): у него свой **urprotocol**, отличающийся от привычного для Optiboot STK500v1, но [AVRDUDE](https://github.com/avrdudes/avrdude) поддерживает его **начиная с версии 7.1** через параметр `-c urclock`.
