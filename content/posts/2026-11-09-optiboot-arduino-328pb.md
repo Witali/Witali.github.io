@@ -57,10 +57,16 @@ https://mcudude.github.io/MiniCore/package_MCUdude_MiniCore_index.json
 Это настройка для платы с уже установленным моим загрузчиком: сам выбор пункта его не удаляет и не устанавливает, а **Burn Bootloader** — отдельная операция с программатором и фьюзами.
 При этом MiniCore показывает все **32768 байт** Flash, но скетч должен помещаться ниже установленного загрузчика: **32256 байт для Middle** или **31744 байта для Full** на ATmega328PB.
 
+Заодно узнал о [Urboot](https://github.com/stefanrueger/urboot): у него свой **urprotocol**, отличающийся от привычного для Optiboot STK500v1, но [AVRDUDE](https://github.com/avrdudes/avrdude) поддерживает его **начиная с версии 7.1** через параметр `-c urclock`.
+
+| Загрузчик | Основные возможности |
+| --- | --- |
+| Оригинальный Optiboot | Flash и проверка записи; EEPROM — опция сборки |
+| Мой Optiboot | Flash; EEPROM в Middle/Full; чтение fuse/lock в Full |
+| Urboot | Flash; в зависимости от сборки — EEPROM, автоопределение скорости, Chip Erase и обновление из внешней SPI Flash |
+
 Для прямой загрузки готового HEX через уже установленный Optiboot использую AVRDUDE с точным типом `m328pb`, Arduino-протоколом и скоростью 115200; в примере нужно подставить свой порт и файл скетча.
 
 ```sh
 avrdude -c arduino -p m328pb -P PORT -b 115200 -D -U flash:w:sketch.hex:i
 ```
-
-Заодно узнал о [Urboot](https://github.com/stefanrueger/urboot): у него свой **urprotocol**, отличающийся от привычного для Optiboot STK500v1, но [AVRDUDE](https://github.com/avrdudes/avrdude) поддерживает его **начиная с версии 7.1** через параметр `-c urclock`.
