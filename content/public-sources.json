@@ -1,5 +1,5 @@
 {
-  "checkedOn": "2026-11-02",
+  "checkedOn": "2026-11-09",
   "repositories": [
     "Witali/MicroMusic",
     "Witali/yoRadio",
@@ -16,7 +16,10 @@
     "Witali/HLV-codec",
     "Witali/LPC-sound-codec",
     "Witali/picolang",
-    "Witali/webgl-example"
+    "Witali/webgl-example",
+    "Witali/optiboot",
+    "Optiboot/optiboot",
+    "MCUdude/MiniCore"
   ],
   "bitbucketRepositories": [
     "rudolff/pic_projects",
