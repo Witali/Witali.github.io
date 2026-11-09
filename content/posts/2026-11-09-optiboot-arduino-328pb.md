@@ -1,7 +1,6 @@
 ---
 title: 'Мой Optiboot в Arduino IDE: Nano с ATmega328PB и неожиданная ошибка'
 date: '2026-11-09'
-draft: true
 tags:
   - Optiboot
   - Arduino
