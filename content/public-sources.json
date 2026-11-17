@@ -1,5 +1,5 @@
 {
-  "checkedOn": "2026-11-10",
+  "checkedOn": "2026-11-17",
   "repositories": [
     "Witali/MicroMusic",
     "Witali/yoRadio",
@@ -18,6 +18,7 @@
     "Witali/picolang",
     "Witali/webgl-example",
     "Witali/optiboot",
+    "Witali/AVR-Cookbook",
     "Optiboot/optiboot",
     "MCUdude/MiniCore",
     "stefanrueger/urboot",
